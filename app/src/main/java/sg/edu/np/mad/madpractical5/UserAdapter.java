@@ -37,8 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_activity_list, parent, false);
-        UserViewHolder holder = new UserViewHolder(view);
-        return holder;
+        return new UserViewHolder(view);
     }
 
     @Override
@@ -68,7 +67,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
                                 Random random = new Random();
                                 int randomNum = random.nextInt(999999);
                                 Intent mainActivityIntent = new Intent(activity, MainActivity.class);
-                                mainActivityIntent.putExtra("name", user.getName() + randomNum);
+                                mainActivityIntent.putExtra("RANDOM_NUMBER", randomNum);
+                                mainActivityIntent.putExtra("name", user.getName());
                                 mainActivityIntent.putExtra("description", user.getDescription());
                                 mainActivityIntent.putExtra("followed", user.getFollowed());
                                 mainActivityIntent.putExtra("id", user.getId());

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MyDBHandler extends SQLiteOpenHelper {
@@ -17,8 +19,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_FOLLOWED = "followed";
-
-
 
     public MyDBHandler(Context context, String name,
                        SQLiteDatabase.CursorFactory factory,
@@ -102,9 +102,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     // Method to get all users
-    public Cursor getAllUsers() {
+    public List<User> getUsers() {
+        List<User> userList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                User user = new User();
+                user.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
+                user.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
+                user.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)));
+                user.setFollowed(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FOLLOWED)) == 1);
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return userList;
     }
 
     // Method to update user follow status
@@ -114,6 +129,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_FOLLOWED, followed ? 1 : 0);
 
         db.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    // Method to update user information
+    public void updateUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, user.getName());
+        values.put(COLUMN_DESCRIPTION, user.getDescription());
+        values.put(COLUMN_FOLLOWED, user.getFollowed() ? 1 : 0);
+
+        db.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(user.getId())});
         db.close();
     }
 }

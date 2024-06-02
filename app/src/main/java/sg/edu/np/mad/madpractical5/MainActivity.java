@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnMsg = findViewById(R.id.button2);
 
         // Set the TextViews with the User's name, description, and default button message
-        tvName.setText(user.getName() + " " + randomNumber);
+        tvName.setText(user.getName());
         tvDescription.setText(user.getDescription());
         btnFollow.setText(user.getFollowed() ? "Unfollow" : "Follow");
 
