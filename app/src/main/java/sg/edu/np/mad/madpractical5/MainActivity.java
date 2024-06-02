@@ -13,8 +13,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    MyDBHandler dbHandler;
-    User user;
+    private MyDBHandler dbHandler;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

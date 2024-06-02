@@ -18,6 +18,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_FOLLOWED = "followed";
 
+
+
     public MyDBHandler(Context context, String name,
                        SQLiteDatabase.CursorFactory factory,
                        int version) {
