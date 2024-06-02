@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MyDBHandler dbHandler;
+    private DatabaseHandler dbHandler;
     private User user;
 
     @Override
@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        dbHandler = new MyDBHandler(this, null, null, 1);
+        dbHandler = new DatabaseHandler(this, null, null, 1);
         int randomNumber = getIntent().getIntExtra("RANDOM_NUMBER", 0);
 
         // Initialize or retrieve a User object from the database
         String userName = "User" + randomNumber;
-        user = dbHandler.findUser(userName);
+        user = dbHandler.getUser(userName);
         if (user == null) {
             user = new User(userName, "Description for " + userName, randomNumber, false);
             dbHandler.addUser(user);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnMsg = findViewById(R.id.button2);
 
         // Set the TextViews with the User's name, description, and default button message
-        tvName.setText(user.getName());
+        tvName.setText(user.getName() + " " + randomNumber);
         tvDescription.setText(user.getDescription());
         btnFollow.setText(user.getFollowed() ? "Unfollow" : "Follow");
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 msg = "Unfollowed";
             }
             user.setFollowed(!user.getFollowed());
-            dbHandler.updateUserFollowStatus(user.getId(), user.getFollowed());
+            dbHandler.updateUser(user);
 
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         });
